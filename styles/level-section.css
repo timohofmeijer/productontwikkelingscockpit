@@ -1,18 +1,232 @@
+.level-section {
+  width: 100%;
+  cursor: default;
+  font-size: 1rem;
+  padding: var(--gutter) 0 0 var(--gutter);
+  @media (min-width: var(--smbreakpoint)) {
+    font-size: 1.1rem;
+  }
+
+  /* Level specific size and color rules */
+  &[data-level='1'] {
+    .wiki-icon {
+      left: 10px !important;
+      font-size: 16px !important;
+    }
+    .sub-sections {
+      background-color: gray(255, 0.55) !important;
+    }
+  }
+  &[data-level='2'] {
+    font-size: 0.9rem;
+    width: 100%;
+    .wiki-icon {
+      top: auto;
+      bottom: 6px;
+      left: 10px !important;
+      font-size: 16px !important;
+    }
+    .box {
+      border: 1px solid gray(0, .15);
+      border-bottom-color: gray(0,.2);
+    }
+    .sub-sections {
+      background-color: gray(255, 0.55) !important;
+    }
+    .time-box .title {
+      /*Safari has a minimum font-size..*/
+      font-size: 12px;
+      transform: scale(0.95);
+    }
+  }
+  &[data-level='3'] {
+    font-size: 0.9rem;
+    width: 100%;
+    .sub-sections {
+      background-color: gray(255, 0.55) !important;
+    }
+    .time-box .title {
+      /*Safari has a minimum font-size..*/
+      font-size: 12px;
+      transform: scale(0.9);
+    }
+  }
+
+  >.box {
+    display: flex;
+    background: var(--Color-graybg);
+    box-shadow: 0 1px 1px gray(0, 0.05);
+    border: 1px solid gray(0, .22);
+    border-bottom-color: gray(0,.25);
+    height: 100%;
+    padding: var(--gutter);
+    padding-bottom: 0;
+    border-radius: 4px;
+    > .section-title {
+      position: relative;
+      flex: 1;
+      font-size: 1.9em;
+      text-align: left;
+      padding-left: 22px;
+      min-height: 2.15em;
+      margin-bottom: 0.75em;
+      > i {
+        position: absolute;
+        left: 0;
+        margin-top: 2px;
+        margin-right: 8px;
+      }
+    }
+    > .section-description {
+      flex: 1;
+      font-size: 1.6em;
+      padding-right: 5em;
+      min-height: 3.6em;
+      padding-bottom: 1.5em;
+    }
+    .wiki-icon, .wiki-icon-deep {
+      color: gray(220);
+      cursor: pointer;
+      transition: color 250ms;
+      text-decoration: none;
+      &:hover {
+        color: inherit !important;
+      }
+    }
+    .wiki-icon {
+      position: absolute;
+      left: 11px;
+      top: 40px;
+      align-self: flex-end;
+      font-size: 0.75em;
+    }
+    .wiki-icon-deep {
+      font-size: 11px;
+      margin-left: 5px;
+    }
+    >.time-box {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      top: -4px;
+      text-align: right;
+      .sub-hour {
+        position: relative;
+        border-radius: 2px;
+        z-index: 1;
+        padding-left: 8px;
+        .sub-hour-title {
+          position: absolute;
+          bottom: 0;
+          left: 8px;
+          color: gray(200);
+        }
+      }
+      .remaining-hours {
+        > .title {
+          font-size: 0.9em;
+          font-weight: normal;
+          color: gray(180);
+          line-height: 1;
+        }
+        >.value {
+          font-size: 1.8em;
+          line-height: 1;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+.sub-sections {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  /*margin: 0 -var(--gutter) 0 -var(--gutter);*/
+  padding-right: var(--gutter);
+  padding-bottom: 15px;
+  border-radius: 0 0 4px 4px;
+  background-color: gray(0, 0.1);
+  overflow: hidden;
+  border-color: gray(0, 0.2);
+  border-style: solid;
+  border-width: 0 1px 1px 1px;
+  >.swim-lane {
+    width: 50%;
+  }
+  &:not(.has-subsections) {
+    justify-content: center;
+  }
+
+  >.uil-ring-css {
+    align-self: center;
+    margin: 20px 0 0 0;
+  }
+
+  >.section-detail {
+    padding: 1.5em 0 0 1.5em;
+    flex: 1;
+    >.body {
+      margin-bottom: 10px;
+      font-size: 11px;
+      line-height: 1.2;
+      color: gray(0);
+      columns: 2 200px;
+      column-gap: 2em;
+      /* min-height prevents that e.g. a single line
+      is not distributed in multiple columns */
+      min-height: 42px;
+    }
+
+    >.project-id {
+      position: relative;
+      left: -1px;
+      font-weight: bold;
+      font-size: 10px;
+      text-align: right;
+      color: white;
+      text-decoration: none;
+      background-color: gray(230);
+      transition: background-color 200ms;
+      padding: 2px 5px 1px 5px;
+      border-radius: 2px;
+    }
+  }
+  >.no-subsections-notice {
+    padding: 1.5em 0 0 0;
+    font-size: 12px;
+    font-style: italic;
+    color: gray(0, 0.6);
+  }
+}
+
+
+
+
+
+
+
 .active-sub-hour {
   position: absolute;
-  background-color: #fff;
+  z-index: 999;
+  right: 108%;
   padding: 8px 13px;
   border-radius: 3px;
+  background-color: #fff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px 7px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  right: 108%;
   transition: top 200ms;
   border: 1px solid gray(0, .15);
   &.is-ontwerp {
-    top: -7px;
+    top: -14px;
   }
   &.is-realisatie {
-    top: 21px;
+    top: 13px;
   }
   &:before, &:after {
     pointer-events: none;

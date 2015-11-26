@@ -284,56 +284,58 @@ export let createLevelSectionComponent = (
                 h.div.totalHours(activeSubHour.total)
               ])
             ] : []
-          ),
+          )
+        ),
 
 
-          config.sectionData.expanded ? [
-            !config.sectionData.subSections && (config.sectionData.hasSubSections || level === 3) ? [
-  ​            h.div.subSections(
-                {
-                  key: 'loading',
-                  classes: {
-                    'is-loading': level !== 3
-                  },
-                  enterAnimation: animateSubsectionEnter,
-                  exitAnimation: animateSubsectionExit
+        config.sectionData.expanded ? [
+          !config.sectionData.subSections && (config.sectionData.hasSubSections || level === 3) ? [
+​            h.div.subSections(
+              {
+                key: 'loading',
+                classes: {
+                  'is-loading': level !== 3
                 },
-                level === 3 ? [
-                  h.div.sectionDetail(
-                    h.div.body(config.sectionData.body || '...'),
-                    h.a.projectId({
-                      target: '_blank',
-                      href: `/project.html#${config.sectionData.id}`,
-                      styles: {
-                        backgroundColor: config.color
-                      }
-                    }, config.sectionData.id)
-                  )
-                ] : [
-                  h.div.uilRingCss(h.div()),
-                ]
-              )
-            ] : [
-              ​h.div.subSections({
-                  classes: {
-                    'is-expanded': true
-                  },
-                  enterAnimation: animateSubsectionEnter,
-                  exitAnimation: animateSubsectionExit
+                enterAnimation: animateSubsectionEnter,
+                exitAnimation: animateSubsectionExit
+              },
+              level === 3 ? [
+                h.div.sectionDetail(
+                  h.div.body(config.sectionData.body || '...'),
+                  h.a.projectId({
+                    target: '_blank',
+                    href: `/project.html#${config.sectionData.id}`,
+                    styles: {
+                      backgroundColor: config.color
+                    }
+                  }, config.sectionData.id)
+                )
+              ] : [
+                h.div.uilRingCss(h.div()),
+              ]
+            )
+          ] : [
+            ​h.div.subSections({
+                classes: {
+                  'is-expanded': true
                 },
-                config.sectionData.hasSubSections ? [
-                  config.sectionData.subSections && config.sectionData.subSections.length && config.sectionData.expanded && subLevelSectionComponentsArray ? [
-                    createLevelSectionList(subLevelSectionComponentsArray, level + 1, topLevelSwimLanes, subLevelSwimLanes)
-                  ] : [
-                    h.div.noSubsectionsNotice('geen projecten')
-                  ]
+                enterAnimation: animateSubsectionEnter,
+                exitAnimation: animateSubsectionExit
+              },
+              config.sectionData.hasSubSections ? [
+                config.sectionData.subSections && config.sectionData.subSections.length && config.sectionData.expanded && subLevelSectionComponentsArray ? [
+                  createLevelSectionList(subLevelSectionComponentsArray, level + 1, topLevelSwimLanes, subLevelSwimLanes)
                 ] : [
                   h.div.noSubsectionsNotice('geen projecten')
                 ]
-              )
-            ]
-          ] : []
-        )
+              ] : [
+                h.div.noSubsectionsNotice('geen projecten')
+              ]
+            )
+          ]
+        ] : []
+
+
       ])
     }
   }
