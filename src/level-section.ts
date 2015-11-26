@@ -238,13 +238,13 @@ export let createLevelSectionComponent = (
               ],
               config.sectionData.title,
               config.sectionData.wiki ? [
-                h.a.wikiIcon.fa.faNewspaperO({ title: 'Ga naar de wiki', href: config.sectionData.wiki })
+                h.a.wikiIcon.fa.faNewspaperO({ title: 'Ga naar de wiki', target: '_blank', href: config.sectionData.wiki })
               ] : []
             )
           ] : [
             h.div.sectionDescription(config.sectionData.description,
               config.sectionData.wiki ? [
-                h.a.wikiIconDeep.fa.faNewspaperO({ title: 'Ga naar de wiki', href: config.sectionData.wiki })
+                h.a.wikiIconDeep.fa.faNewspaperO({ title: 'Ga naar de wiki', target: '_blank', href: config.sectionData.wiki })
               ] : []
             )
           ],
