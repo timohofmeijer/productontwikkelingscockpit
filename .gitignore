@@ -1,0 +1,7 @@
+node_modules
+.publish
+
+build
+
+# Mac
+.DS_Store

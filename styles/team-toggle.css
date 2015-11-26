@@ -1,0 +1,95 @@
+.team-toggle {
+  position: relative;
+  z-index: 9;
+  width: 100%;
+  text-align: right;
+  margin-bottom: 15px;
+
+  &-active-team {
+    position: relative;
+    display: inline;
+    font-size: 17px;
+    overflow: visible;
+    z-index: 2;
+    cursor: pointer;
+    top: -5px;
+    right: 5px;
+    &:after {
+      margin-left: 5px;
+      content: ' ';
+      height: 0;
+      position: relative;
+      width: 0;
+      border: .35em solid transparent;
+      border-top-color: #000;
+      border-top-width: .40em;
+      top: .8em;
+    }
+  }
+
+  &-bubble {
+    transform-origin: 75% -15%;
+    position: absolute;
+    background: gray(255);
+    right: -5px;
+    margin-top: 15px;
+    border-radius: 5px;
+    z-index: 1;
+    box-shadow: 0 1px 2px gray(0,0.1), 0 1px 6px gray(0,0.05);
+    &:before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: solid transparent;
+      z-index: -1;
+      right: 22%;
+      top: -32px;
+      margin-left: -16px;
+      border-width: 16px;
+      border-bottom-color: #fafafa;
+    }
+  }
+
+  &-curtain {
+    /* -webkit-filter: blur(20px); */
+    /*transition: -webkit-filter 1000ms;*/
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: gray(0,0.2);
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > .uil-ring-css {
+      > div {
+        box-shadow: 0 1.5px 0 0 gray(0, 0.8);
+      }
+    }
+  }
+
+  &-title {
+    position: relative;
+    z-index: 1;
+    padding: 10px 20px;
+    font-size: 15px;
+    cursor: pointer;
+    &.is-active {
+      background:gray(100);
+      color: gray(255);
+      cursor: default;
+    }
+    &:first-child {
+      border-radius: 4px 4px 0 0;
+    }
+    &:last-child {
+      border-radius: 0 0 4px 4px;
+    }
+    &:hover:not(.is-active) {
+      background-color: gray(230);
+    }
+  }
+}

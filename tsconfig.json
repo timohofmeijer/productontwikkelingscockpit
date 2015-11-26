@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "outDir": "build/js",
+        "noEmitOnError": false
+    },
+    "exclude": [
+        "node_modules",
+        ".git",
+        ".vs",
+        "bin",
+        "obj"
+    ],
+    "filesGlob": [
+        "./src/**/*.ts",
+        "./node_modules/axios/axios.d.ts"
+    ],
+    "files": [
+        "./src/compact-dom-typings.d.ts",
+        "./src/level-section-list.ts",
+        "./src/level-section.ts",
+        "./src/next-up-app.ts",
+        "./src/team-toggle.ts",
+        "./src/velocity.d.ts",
+        "./node_modules/axios/axios.d.ts"
+    ],
+    "atom": {
+        "rewriteTsconfig": true
+    }
+}
