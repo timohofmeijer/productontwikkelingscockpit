@@ -1,6 +1,6 @@
-import * as maquette from "maquette"
-import * as axios from "axios"
-import { createLevelSectionList } from "./level-section-list"
+import * as maquette from 'maquette'
+import * as axios from 'axios'
+import { createLevelSectionList } from './level-section-list'
 
 let h = maquette.h
 
@@ -41,7 +41,7 @@ let animateSubsectionEnter = (domNode: HTMLElement, properties: maquette.VNodePr
   let distance: number = Math.abs(targetHeight - startHeight)
   let duration: number = getAnimationDuration(distance, 700)
 
-  Velocity.animate(domNode, { height: [ targetHeight, startHeight ] }, { duration, easing: 'ease-in' }).then( () => {//[70, 10]
+  Velocity.animate(domNode, { height: [ targetHeight, startHeight ] }, { duration, easing: 'ease-in' }).then( () => { // [70, 10]
     // Resetting height is required to ensure height adapts
     // when nested sections are being expanded.
     domNode.style.height = ''
@@ -77,7 +77,7 @@ let unExpandSubSections = (sectionData: SectionData) => {
   sectionData.subSections.forEach((subSection: SectionData) => {
     subSection.expanded = false
     if (subSection.subSections) {
-      subSection.subSections.forEach((subSection: SectionData) => {
+      subSection.subSections.forEach((subSubSection: SectionData) => {
         subSection.expanded = false
       })
     }
@@ -92,9 +92,18 @@ let unExpandSubSections = (sectionData: SectionData) => {
  *
  * @returns { LevelSectionComponent }
  */
-export let createLevelSectionComponent = (projector: maquette.Projector, config: { reverseSubHours: any, sectionData: SectionData, level: number, dataEndpoint: string, color: string }): LevelSectionComponent => {
+export let createLevelSectionComponent = (
+  projector: maquette.Projector,
+  config: {
+    reverseSubHours: any,
+    sectionData: SectionData,
+    level: number,
+    dataEndpoint: string,
+    color: string
+  }
+): LevelSectionComponent => {
 
-  let level = config.level? config.level + 1 : 1
+  let level = config.level ? config.level + 1 : 1
 
   let subLevelSectionComponentsArray: LevelSectionComponent[]
 ​
@@ -108,12 +117,12 @@ export let createLevelSectionComponent = (projector: maquette.Projector, config:
       evt.preventDefault()
     } else if (!evt.defaultPrevented) {
 ​
+      // At level 3, we'll expand and show project-details
+      // in stead of fetching subsection.
       if (level === 3) {
-        // At level 3, we'll expand and show project-details
-        // in stead of fetching subsection.
-      }
+        // Ignore
       // Fetch subsections if needed
-      else if (!config.sectionData.subSections) {
+      } else if (!config.sectionData.subSections) {
 
         if (config.sectionData.hasSubSections) {
 
@@ -126,7 +135,14 @@ export let createLevelSectionComponent = (projector: maquette.Projector, config:
             config.sectionData.subSections = response.data
 
             subLevelSectionComponentsArray = config.sectionData.subSections.map(function (subSectionData: SectionData) {
-              return createLevelSectionComponent(projector, { reverseSubHours: config.reverseSubHours, sectionData: subSectionData, level: level, dataEndpoint:dataEndpoint, color: config.color })
+              let conf = {
+                reverseSubHours: config.reverseSubHours,
+                sectionData: subSectionData,
+                level: level,
+                dataEndpoint: dataEndpoint,
+                color: config.color
+              };
+              return createLevelSectionComponent(projector, conf)
             })
 
             // We'll use a minimal loading state duration of 800ms
@@ -179,7 +195,7 @@ export let createLevelSectionComponent = (projector: maquette.Projector, config:
         h.div.box(
           level === 1 ? [
             h.div.sectionTitle(
-              config.sectionData.icon? [
+              config.sectionData.icon ? [
                 h.i.fa[config.sectionData.icon]()
               ] : [
                 h.i.fa.faBookmarkO()
@@ -196,35 +212,35 @@ export let createLevelSectionComponent = (projector: maquette.Projector, config:
               ] : []
             )
           ],
-          h.div.timeBox({classes:{'is-reversed': config.sectionData.hours.hasSubHours && reversedSubHours }},
+          h.div.timeBox({ classes: { 'is-reversed': config.sectionData.hours.hasSubHours && reversedSubHours } },
             config.sectionData.hours.hasSubHours ? [
-              config.sectionData.hours.subHours.map((subHour, i)=> {
+              config.sectionData.hours.subHours.map((subHour, i) => {
                 return h.div.subHour({
                   onclick: config.reverseSubHours,
                   classes: {
                     'first-child': (i === 0 && !reversedSubHours) || (i === 1 && reversedSubHours)
                   }
                 }, [
-                  h.div.remainingHours(h.div.title('open'), h.div.value(subHour.remaining+'')),
+                  h.div.remainingHours(h.div.title('open'), h.div.value(subHour.remaining + '')),
                   h.div.subHourTitle(subHour.type),
                   (i === 1 && !reversedSubHours) || (i === 0 && reversedSubHours) ? [
                     h.div.subTimeBox(
-                      h.div.totalHours(h.div.title('totaal'), h.div.value(subHour.total+'')),
-                      h.div.usedHours(h.div.title('besteed'), h.div.value(subHour.used+''))
+                      h.div.totalHours(h.div.title('totaal'), h.div.value(subHour.total + '')),
+                      h.div.usedHours(h.div.title('besteed'), h.div.value(subHour.used + ''))
                     )
                   ] : []
                 ])
               })
-            ]: [
-              h.div.remainingHours(h.div.title('open'), h.div.value(config.sectionData.hours.remaining+'')),
+            ] : [
+              h.div.remainingHours(h.div.title('open'), h.div.value(config.sectionData.hours.remaining + '')),
               h.div.subTimeBox(
-                h.div.totalHours(h.div.title('totaal'), h.div.value(config.sectionData.hours.total+'')),
-                h.div.usedHours(h.div.title('besteed'), h.div.value(config.sectionData.hours.used+''))
+                h.div.totalHours(h.div.title('totaal'), h.div.value(config.sectionData.hours.total + '')),
+                h.div.usedHours(h.div.title('besteed'), h.div.value(config.sectionData.hours.used + ''))
               )
             ]
           ),
           config.sectionData.expanded ? [
-            !config.sectionData.subSections && (config.sectionData.hasSubSections || level === 3) ? [
+            config.sectionData.subSections && (config.sectionData.hasSubSections || level === 3) ? [
   ​            h.div.subSections(
                 {
                   key: 'loading',
@@ -237,9 +253,15 @@ export let createLevelSectionComponent = (projector: maquette.Projector, config:
                 level === 3 ? [
                   h.div.sectionDetail(
                     h.div.body(config.sectionData.body || '...'),
-                    h.a.projectId({ target: '_blank', href: `/project.html#${config.sectionData.id}`, styles: { backgroundColor: config.color } }, config.sectionData.id)
+                    h.a.projectId({
+                      target: '_blank',
+                      href: `/project.html#${config.sectionData.id}`,
+                      styles: {
+                        backgroundColor: config.color
+                      }
+                    }, config.sectionData.id)
                   )
-                ]: [
+                ] : [
                   h.div.uilRingCss(h.div()),
                 ]
               )

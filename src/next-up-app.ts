@@ -1,18 +1,18 @@
-///<reference path="compact-dom-typings.d.ts" />
-///<reference path="../typings/section-data.d.ts" />
-///<reference path="../typings/maquette/maquette.d.ts" />
-///<reference path="../typings/axios/axios.d.ts" />
-///<reference path="../typings/velocity-animate/velocity-animate.d.ts" />
-///<reference path="./velocity.d.ts" />
-///<reference path="../typings/randomcolor.d.ts" />
+///<reference path='compact-dom-typings.d.ts' />
+///<reference path='../typings/section-data.d.ts' />
+///<reference path='../typings/maquette/maquette.d.ts' />
+///<reference path='../typings/axios/axios.d.ts' />
+///<reference path='../typings/velocity-animate/velocity-animate.d.ts' />
+///<reference path='./velocity.d.ts' />
+///<reference path='../typings/randomcolor.d.ts' />
 
-import * as maquette from "maquette"
-import * as axios from "axios"
-import { randomColor } from "randomcolor"
+import * as maquette from 'maquette'
+import * as axios from 'axios'
+import { randomColor } from 'randomcolor'
 
-import { createLevelSectionList } from "./level-section-list"
-import { createLevelSectionComponent } from "./level-section"
-import { createTeamToggleComponent } from "./team-toggle"
+import { createLevelSectionList } from './level-section-list'
+import { createLevelSectionComponent } from './level-section'
+import { createTeamToggleComponent } from './team-toggle'
 
 
 let h = maquette.h
@@ -23,7 +23,7 @@ let levelSectionComponentsArray: LevelSectionComponent[] = []
 
 let teamToggleComponent: TeamToggleComponent
 
-let hash = window.location.hash.replace(/#/,'').replace(/%20/,' ');
+let hash = window.location.hash.replace(/#/, '').replace(/%20/, ' ');
 let activeTeam: string = hash || localStorage.getItem('activeTeam') || 'Next Architectuur'
 
 let dataEndpoint: string
@@ -34,8 +34,8 @@ let dataEndpoint: string
  * past the set breakpoint, we'll trigger a re-render.
  */
 
-const topLevelBreakPoint: number = 800
-const subLevelBreakPoint: number = 1200
+const topLevelBreakPoint = 800
+const subLevelBreakPoint = 1200
 
 let widthChange = () => {
   projector.scheduleRender()
@@ -45,7 +45,7 @@ let topLevelMediaQuery: MediaQueryList
 let subLevelMediaQuery: MediaQueryList
 
 if (window.matchMedia) {
-	topLevelMediaQuery = window.matchMedia(`(min-width: ${topLevelBreakPoint}px)`)
+  topLevelMediaQuery = window.matchMedia(`(min-width: ${topLevelBreakPoint}px)`)
   topLevelMediaQuery.addListener(widthChange)
 
   subLevelMediaQuery = window.matchMedia(`(min-width: ${subLevelBreakPoint}px)`)
@@ -154,18 +154,19 @@ let createLevelSectionComponents = (sectionDataArray: SectionData[]): void => {
     }
 
     // return createLevelSectionComponent(projector, {sectionData, 0, projector, dataEndpoint, color: string: color })
-    return createLevelSectionComponent(projector, { reverseSubHours: reverseSubHours, sectionData: sectionData, level: 0, dataEndpoint: dataEndpoint, color: color })
+    let conf = { reverseSubHours: reverseSubHours, sectionData: sectionData, level: 0, dataEndpoint: dataEndpoint, color: color }
+    return createLevelSectionComponent(projector, conf)
   })
 }
 
-const apiRoot: string = window.location.pathname.replace(/planning\.html/, '/')+'planning/';
+const apiRoot: string = window.location.pathname.replace(/planning\.html/, '/') + 'planning/';
 
 /**
  * Fetch active-team releted data and
  * @type { FetchData }
  * @returns { Promise }
  */
-let latestData : any;//SectionData[];
+let latestData: any; // SectionData[];
 let fetchData: FetchData = () => {
   dataEndpoint = apiRoot + activeTeam + '/'
   return axios.get(dataEndpoint).then((response) => {
@@ -199,7 +200,7 @@ let setActiveTeam: SetActiveTeam = (team, cb) => {
   // Update activeTeam
   activeTeam = team;
   // Update URL
-  history.replaceState(null, null, window.location.pathname+'#'+activeTeam);
+  history.replaceState(null, null, window.location.pathname + '#' + activeTeam);
   // Update localStorage
   localStorage.setItem('activeTeam', activeTeam);
   // Fetch new data and create new sectionLevelComponents
@@ -224,10 +225,10 @@ let initialize = () => {
     projector.append(document.body, renderMaquette)
   });
 
-  teamToggleComponent = createTeamToggleComponent(projector, { getActiveTeam:getActiveTeam, setActiveTeam:setActiveTeam })
+  teamToggleComponent = createTeamToggleComponent(projector, { getActiveTeam: getActiveTeam, setActiveTeam: setActiveTeam })
 }
 
-reverseSubHours = (e: any) => {//MouseEvent
+reverseSubHours = (e: any) => { // MouseEvent
   if ((/first-child/).test(e.currentTarget.className)) {
     reversedSubHours = !reversedSubHours
     projector.scheduleRender()

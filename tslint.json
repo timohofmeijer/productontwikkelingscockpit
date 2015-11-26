@@ -2,9 +2,7 @@
   "rules": {
     "align": [
       true,
-      "parameters",
-      "arguments",
-      "statements"
+      "parameters"
     ],
     "ban": false,
     "class-name": true,
@@ -36,7 +34,7 @@
     ],
     "no-any": false,
     "no-arg": true,
-    "no-bitwise": true,
+    "no-bitwise": false,
     "no-conditional-assignment": true,
     "no-console": [
       true,
@@ -80,7 +78,7 @@
       "avoid-escape"
     ],
     "radix": true,
-    "semicolon": true,
+    "semicolon": false,
     "sort-object-literal-keys": false,
     "switch-default": false,
     "triple-equals": [

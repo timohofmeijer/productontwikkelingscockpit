@@ -1,5 +1,5 @@
-///<reference path="../typings/section-data.d.ts" />
-import * as maquette from "maquette"
+///<reference path='../typings/section-data.d.ts' />
+import * as maquette from 'maquette'
 
 let h = maquette.h
 
@@ -8,7 +8,12 @@ let h = maquette.h
  * When we have enough horizontal space, we'll create
  * swimlanes for the 1st and 2nd 'level' components.
  */
-export let createLevelSectionList = (components: LevelSectionComponent[], level: number, topLevelSwimLanes: boolean, subLevelSwimLanes: boolean, reversedSubHours: boolean): maquette.VNode[] => {
+export let createLevelSectionList = (
+  components: LevelSectionComponent[],
+  level: number,
+  topLevelSwimLanes: boolean,
+  subLevelSwimLanes: boolean,
+  reversedSubHours: boolean): maquette.VNode[] => {
 
   let VNodes: maquette.VNode[]
 

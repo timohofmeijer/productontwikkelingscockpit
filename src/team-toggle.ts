@@ -1,4 +1,4 @@
-import * as maquette from "maquette"
+import * as maquette from 'maquette'
 
 let h = maquette.h
 
@@ -8,7 +8,11 @@ let h = maquette.h
  *
  * @returns { TeamToggleComponent }
  */
-export let createTeamToggleComponent = (projector: maquette.Projector, config: { getActiveTeam: GetActiveTeam, setActiveTeam: SetActiveTeam }): TeamToggleComponent => {
+export let createTeamToggleComponent = (
+  projector: maquette.Projector,
+  config: {
+    getActiveTeam: GetActiveTeam, setActiveTeam: SetActiveTeam
+  }): TeamToggleComponent => {
 
   let toggleIsActive = false
 
@@ -25,7 +29,7 @@ export let createTeamToggleComponent = (projector: maquette.Projector, config: {
     Velocity.animate(domNode, { opacity: [ 1, 0 ] }, { duration: 150, easing: [70, 10] })
   }
 
-  let fadeOut = (domNode: HTMLElement, removeDomNodeFunction : () => void, properties: maquette.VNodeProperties) => {
+  let fadeOut = (domNode: HTMLElement, removeDomNodeFunction: () => void, properties: maquette.VNodeProperties) => {
     domNode.style.opacity = '1'
     Velocity.animate(domNode, { opacity:  [ 0, 1 ] }, { duration: 150, easing: 'ease-out' }).then(() => {
       removeDomNodeFunction();
@@ -60,7 +64,7 @@ export let createTeamToggleComponent = (projector: maquette.Projector, config: {
     })
   }
 
-  let bubbleOut = (domNode: HTMLElement, removeDomNodeFunction : () => void, properties: maquette.VNodeProperties) => {
+  let bubbleOut = (domNode: HTMLElement, removeDomNodeFunction: () => void, properties: maquette.VNodeProperties) => {
     Velocity.animate(domNode, { scale: 0, opacity: [0, 1] }, { duration: 300, easing: 'ease-in-circ' }).then(removeDomNodeFunction)
   }
 
