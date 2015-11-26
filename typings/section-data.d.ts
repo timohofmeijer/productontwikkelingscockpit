@@ -31,7 +31,7 @@ interface SubHour {
 }
 
 interface LevelSectionComponent {
-  renderMaquette: (topLevelSwimLanes: boolean, subLevelSwimLanes:boolean, reversedSubHours:boolean) => maquette.VNode;
+  renderMaquette: (topLevelSwimLanes: boolean, subLevelSwimLanes: boolean) => maquette.VNode;
 }
 
 interface TeamToggleComponent {

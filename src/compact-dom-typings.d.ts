@@ -45,6 +45,7 @@ interface CompactDomNode {
   wikiIconDeep: CompactDomNode;
   subHour: CompactDomNode;
   subHourTitle: CompactDomNode;
+  activeSubHour: CompactDomNode;
 }
 
 declare module maquette.h {

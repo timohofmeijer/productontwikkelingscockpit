@@ -70,10 +70,6 @@ const availableColors: string[] = [
 ];
 
 
-let reversedSubHours = true;
-let reverseSubHours: any;
-
-
 /**
  * The app's main `renderMaquette` function.
  * @returns { maquette.VNode }
@@ -85,7 +81,7 @@ let renderMaquette = () => {
   let nextUpApp = h.div.nextUpApp(
     teamToggleComponent.renderMaquette(),
     h.div.nextUpAppOutlet(
-      createLevelSectionList(components, 1,  topLevelMediaQuery.matches, subLevelMediaQuery.matches, reversedSubHours)
+      createLevelSectionList(components, 1,  topLevelMediaQuery.matches, subLevelMediaQuery.matches)
     )
   )
 
@@ -154,7 +150,7 @@ let createLevelSectionComponents = (sectionDataArray: SectionData[]): void => {
     }
 
     // return createLevelSectionComponent(projector, {sectionData, 0, projector, dataEndpoint, color: string: color })
-    let conf = { reverseSubHours: reverseSubHours, sectionData: sectionData, level: 0, dataEndpoint: dataEndpoint, color: color }
+    let conf = { sectionData: sectionData, level: 0, dataEndpoint: dataEndpoint, color: color }
     return createLevelSectionComponent(projector, conf)
   })
 }
@@ -226,14 +222,6 @@ let initialize = () => {
   });
 
   teamToggleComponent = createTeamToggleComponent(projector, { getActiveTeam: getActiveTeam, setActiveTeam: setActiveTeam })
-}
-
-reverseSubHours = (e: any) => { // MouseEvent
-  if ((/first-child/).test(e.currentTarget.className)) {
-    reversedSubHours = !reversedSubHours
-    projector.scheduleRender()
-    e.preventDefault();
-  }
 }
 
 document.addEventListener('DOMContentLoaded', initialize, false)

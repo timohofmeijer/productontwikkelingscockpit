@@ -12,8 +12,8 @@ export let createLevelSectionList = (
   components: LevelSectionComponent[],
   level: number,
   topLevelSwimLanes: boolean,
-  subLevelSwimLanes: boolean,
-  reversedSubHours: boolean): maquette.VNode[] => {
+  subLevelSwimLanes: boolean
+): maquette.VNode[] => {
 
   let VNodes: maquette.VNode[]
 
@@ -22,21 +22,21 @@ export let createLevelSectionList = (
       h.div.swimLane({ key: 'leftSwimLane' },
         components.map((component: LevelSectionComponent, index: number) => {
           if (index % 2 === 0) {
-            return component.renderMaquette(topLevelSwimLanes, subLevelSwimLanes, reversedSubHours)
+            return component.renderMaquette(topLevelSwimLanes, subLevelSwimLanes)
           }
         })
       ),
       h.div.swimLane({ key: 'rightSwimLane' },
         components.map((component: LevelSectionComponent, index: number) => {
           if (index % 2 !== 0) {
-            return component.renderMaquette(topLevelSwimLanes, subLevelSwimLanes, reversedSubHours)
+            return component.renderMaquette(topLevelSwimLanes, subLevelSwimLanes)
           }
         })
       )
     ]
   } else {
     VNodes = components.map((component: LevelSectionComponent) => {
-      return component.renderMaquette(topLevelSwimLanes, subLevelSwimLanes, reversedSubHours)
+      return component.renderMaquette(topLevelSwimLanes, subLevelSwimLanes)
     })
   }
   return VNodes

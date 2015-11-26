@@ -71,7 +71,7 @@ gulp.task('html', function() {
 });
 
 
-gulp.task('servemac', ['default'], function() {
+gulp.task('serve', ['default'], function() {
   var url = require('url'),
       proxy = require('proxy-middleware');
 
@@ -101,6 +101,8 @@ gulp.task('servemac', ['default'], function() {
    gulp.watch('./web/**/*.html', ['html']);
 
 });
+
+gulp.task('s', ['serve']);
 
 //gulp.task('deploy', function() {
   //return gulp.src('./build/web/**/*')

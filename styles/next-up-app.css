@@ -15,7 +15,7 @@ body {
   padding: 20px;
   user-select: none;
   overflow: scroll;
-  background: gray(195);
+  background: gray(210);
 }
 
 .next-up-app-outlet {
@@ -46,7 +46,7 @@ body {
       font-size: 16px !important;
     }
     .sub-sections {
-      background-color: gray(0, 0.19) !important;
+      background-color: gray(0, 0.08) !important;
     }
   }
   &[data-level='2'] {
@@ -59,7 +59,7 @@ body {
       font-size: 16px !important;
     }
     .sub-sections {
-      background-color: gray(0, 0.17) !important;
+      background-color: gray(0, 0.12) !important;
     }
     .time-box .title {
       /*Safari has a minimum font-size..*/
@@ -71,7 +71,7 @@ body {
     font-size: 0.9rem;
     width: 100%;
     .sub-sections {
-      background-color: gray(0, 0.17) !important;
+      background-color: gray(0, 0.12) !important;
     }
     .time-box .title {
       /*Safari has a minimum font-size..*/
@@ -84,8 +84,9 @@ body {
     position: relative;
     background: var(--Color-graybg);
     box-shadow: 0 1px 1px gray(0, 0.05);
+    border: 1px solid gray(0, .22);
     height: 100%;
-    padding: 1.5em;
+    padding: var(--gutter);
     padding-bottom: 0;
     border-radius: 4px;
     > .section-title {
@@ -94,7 +95,7 @@ body {
       text-align: left;
       padding-right: 4em;
       padding-left: 22px;
-      min-height: 2em;
+      min-height: 2.15em;
       margin-bottom: 0.75em;
       > i {
         margin-top: 2px;
@@ -133,14 +134,12 @@ body {
       position: absolute;
       top: 0;
       right: 0;
-      padding: 1.5em 1.5em 0 0;
+      padding: 0.9em 1em 0 0;
       text-align: right;
       display: flex;
-      &.is-reversed {
-        flex-direction: row-reverse;
-      }
+      flex-direction: column;
       .sub-hour {
-        display: flex;
+        /*display: flex;*/
         position: relative;
         .sub-hour-title {
           position: absolute;
@@ -149,10 +148,9 @@ body {
           color: gray(200);
         }
         border-radius: 2px;
-        border-left: 1px solid silver;
         z-index: 1;
         padding-left: 8px;
-        &.first-child {
+        /*&.first-child {
           z-index: 0;
           min-width: 60px;
           transition: background 400ms;
@@ -160,30 +158,17 @@ body {
           &:hover {
             background: gray(250);
           }
-        }
-      }
-      .sub-time-box {
-        margin-top: 1px;
-        >.used-hours, >.total-hours {
-          line-height: 1;
-          > .title {
-            font-size: 1em;
-            color: gray(150);
-          }
-          > .value {
-            font-size: 1.2em;
-          }
-        }
+        }*/
       }
       .remaining-hours {
-        margin-right: 10px;
         > .title {
-          font-size: 1em;
+          font-size: 0.9em;
           font-weight: normal;
-          color: gray(150);
+          color: gray(180);
+          line-height: 1;
         }
         >.value {
-          font-size: 2.4em;
+          font-size: 1.8em;
           line-height: 1;
         }
       }
@@ -199,6 +184,7 @@ body {
       border-radius: 0 0 4px 4px;
       background-color: gray(0, 0.1);
       overflow: hidden;
+      border-top: 1px solid gray(0, 0.2);
 
       >.swim-lane {
         width: 50%;

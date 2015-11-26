@@ -95,7 +95,6 @@ let unExpandSubSections = (sectionData: SectionData) => {
 export let createLevelSectionComponent = (
   projector: maquette.Projector,
   config: {
-    reverseSubHours: any,
     sectionData: SectionData,
     level: number,
     dataEndpoint: string,
@@ -136,13 +135,12 @@ export let createLevelSectionComponent = (
 
             subLevelSectionComponentsArray = config.sectionData.subSections.map(function (subSectionData: SectionData) {
               let conf = {
-                reverseSubHours: config.reverseSubHours,
                 sectionData: subSectionData,
                 level: level,
                 dataEndpoint: dataEndpoint,
                 color: config.color
               };
-              return createLevelSectionComponent(projector, conf)
+              return createLevelSectionComponent(projector, conf);
             })
 
             // We'll use a minimal loading state duration of 800ms
@@ -186,13 +184,51 @@ export let createLevelSectionComponent = (
       onclick: toggleExpand,
       'data-level': level.toString()
   }
-// console.log('createLevelSectionComponent:level', level);
+
+  let activeSubHour: any
+
+  let showTimeDetails = (event: any) => {
+    let node = <any>event.currentTarget
+    let subHourString = node.dataset['subhour']
+    let subHour = JSON.parse(subHourString)
+    activeSubHour = subHour
+  }
+
+  let hideTimeDetails = (event: any) => {
+    let node: any = event.relatedTarget
+    let parentNode: any = node ? node.parentNode : node
+    let classes = node.className + parentNode.className
+    if (!(/remaining-hours/).test(classes)) {
+      activeSubHour = undefined
+    }
+  }
+
+  let bubbleIn = (domNode: HTMLElement, properties: maquette.VNodeProperties) => {
+    domNode.style.visibility = 'hidden'
+    Velocity.animate(domNode, { scale: 0, opacity: 0 }, 1).then(() => {
+      domNode.style.visibility = ''
+      Velocity.animate(domNode, { scale: [1, 0], opacity: [1, 0] }, { delay: 400, duration: 280, easing: 'ease-out-circ' })
+    })
+  }
+
+  let bubbleOut = (domNode: HTMLElement, removeDomNodeFunction: () => void, properties: maquette.VNodeProperties) => {
+
+    // Cancel possible delay
+    let w: any = <any>window;
+    w.Velocity(domNode, 'stop', true);
+
+    Velocity.animate(domNode, { scale: 0, opacity: [0, 1] }, { duration: 300, easing: 'ease-in-circ' }).then(removeDomNodeFunction)
+  }
+
+
   let levelSectionComponent: LevelSectionComponent = {
 
-    renderMaquette: (topLevelSwimLanes, subLevelSwimLanes, reversedSubHours) => {
+    renderMaquette: (topLevelSwimLanes, subLevelSwimLanes) => {
 
       return h.section.levelSection(props, [
         h.div.box(
+
+
           level === 1 ? [
             h.div.sectionTitle(
               config.sectionData.icon ? [
@@ -212,35 +248,47 @@ export let createLevelSectionComponent = (
               ] : []
             )
           ],
-          h.div.timeBox({ classes: { 'is-reversed': config.sectionData.hours.hasSubHours && reversedSubHours } },
-            config.sectionData.hours.hasSubHours ? [
-              config.sectionData.hours.subHours.map((subHour, i) => {
-                return h.div.subHour({
-                  onclick: config.reverseSubHours,
-                  classes: {
-                    'first-child': (i === 0 && !reversedSubHours) || (i === 1 && reversedSubHours)
-                  }
-                }, [
-                  h.div.remainingHours(h.div.title('open'), h.div.value(subHour.remaining + '')),
-                  h.div.subHourTitle(subHour.type),
-                  (i === 1 && !reversedSubHours) || (i === 0 && reversedSubHours) ? [
-                    h.div.subTimeBox(
-                      h.div.totalHours(h.div.title('totaal'), h.div.value(subHour.total + '')),
-                      h.div.usedHours(h.div.title('besteed'), h.div.value(subHour.used + ''))
-                    )
-                  ] : []
+
+
+          h.div.timeBox(
+            config.sectionData.hours.subHours.map((subHour, i) => {
+              if (true || subHour.total || subHour.remaining || subHour.used) {
+                // debugger
+                return h.div.subHour([
+                  h.div.remainingHours({
+                    key: config.sectionData + 'hours',
+                    'data-subHour': JSON.stringify(subHour),
+                    onmouseenter: showTimeDetails,
+                    onmouseleave: hideTimeDetails
+                  }, [
+                    h.div.title(subHour.type),
+                    h.div.value(subHour.remaining + '')
+                  ])
                 ])
-              })
-            ] : [
-              h.div.remainingHours(h.div.title('open'), h.div.value(config.sectionData.hours.remaining + '')),
-              h.div.subTimeBox(
-                h.div.totalHours(h.div.title('totaal'), h.div.value(config.sectionData.hours.total + '')),
-                h.div.usedHours(h.div.title('besteed'), h.div.value(config.sectionData.hours.used + ''))
-              )
-            ]
+              }
+            }),
+            activeSubHour ? [
+              h.div.activeSubHour({
+                classes: {
+                  'is-ontwerp': activeSubHour.type === 'Ontwerp',
+                  'is-realisatie': activeSubHour.type === 'Realisatie'
+                },
+                enterAnimation: bubbleIn,
+                exitAnimation: bubbleOut
+              }, [
+                h.div.title('open'),
+                h.div.remainingHours(activeSubHour.remaining),
+                h.div.title('besteed'),
+                h.div.usedHours(activeSubHour.used),
+                h.div.title('totaal'),
+                h.div.totalHours(activeSubHour.total)
+              ])
+            ] : []
           ),
+
+
           config.sectionData.expanded ? [
-            config.sectionData.subSections && (config.sectionData.hasSubSections || level === 3) ? [
+            !config.sectionData.subSections && (config.sectionData.hasSubSections || level === 3) ? [
   ​            h.div.subSections(
                 {
                   key: 'loading',
@@ -274,8 +322,8 @@ export let createLevelSectionComponent = (
                   exitAnimation: animateSubsectionExit
                 },
                 config.sectionData.hasSubSections ? [
-                  config.sectionData.subSections.length && config.sectionData.expanded && subLevelSectionComponentsArray ? [
-                    createLevelSectionList(subLevelSectionComponentsArray, level + 1, topLevelSwimLanes, subLevelSwimLanes, reversedSubHours)
+                  config.sectionData.subSections && config.sectionData.subSections.length && config.sectionData.expanded && subLevelSectionComponentsArray ? [
+                    createLevelSectionList(subLevelSectionComponentsArray, level + 1, topLevelSwimLanes, subLevelSwimLanes)
                   ] : [
                     h.div.noSubsectionsNotice('geen projecten')
                   ]

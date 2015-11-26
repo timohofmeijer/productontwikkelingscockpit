@@ -1,0 +1,5 @@
+:root {
+  --gutter: 1.3em;
+  --Color-graybg: gray(252);
+  /*--smbreakpoint: 800px; Nesting icm customProperties seems flawed in PostCSS */
+}
