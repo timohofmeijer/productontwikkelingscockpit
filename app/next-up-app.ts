@@ -1,18 +1,18 @@
-///<reference path='compact-dom-typings.d.ts' />
-///<reference path='../typings/section-data.d.ts' />
-///<reference path='../typings/maquette/maquette.d.ts' />
-///<reference path='../typings/axios/axios.d.ts' />
-///<reference path='../typings/velocity-animate/velocity-animate.d.ts' />
-///<reference path='./velocity.d.ts' />
-///<reference path='../typings/randomcolor.d.ts' />
+///<reference path='./../typings/compact-dom-typings.d.ts' />
+///<reference path='./../typings/section-data.d.ts' />
+///<reference path='./../typings/maquette/maquette.d.ts' />
+///<reference path='./../typings/axios/axios.d.ts' />
+///<reference path='./../typings/velocity-animate/velocity-animate.d.ts' />
+///<reference path='./../typings/velocity.d.ts' />
+///<reference path='./../typings/randomcolor.d.ts' />
 
 import * as maquette from 'maquette'
 import * as axios from 'axios'
 import { randomColor } from 'randomcolor'
 
-import { createLevelSectionList } from './level-section-list'
-import { createLevelSectionComponent } from './level-section'
-import { createTeamToggleComponent } from './team-toggle'
+import { createLevelSectionList } from './components/level-section-list'
+import { createLevelSectionComponent } from './components/level-section'
+import { createTeamToggleComponent } from './components/team-toggle'
 
 
 let h = maquette.h
@@ -155,7 +155,7 @@ let createLevelSectionComponents = (sectionDataArray: SectionData[]): void => {
   })
 }
 
-const apiRoot: string = window.location.pathname.replace(/planning\.html/, '/') + 'planning/';
+const apiRoot: string = window.location.pathname.replace(/planning\.html/, '') + 'planning/';
 
 /**
  * Fetch active-team releted data and

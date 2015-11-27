@@ -1,4 +1,3 @@
-///<reference path='../typings/section-data.d.ts' />
 import * as maquette from 'maquette'
 
 let h = maquette.h

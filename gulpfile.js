@@ -30,11 +30,11 @@ var BROWSERSYNC_HOST = process.env.IP || "127.0.0.1";
 gulp.task('clean', del.bind(null, ['./build']));
 
 gulp.task('css', function() {
-  return gulp.src('web/next-up-app.css')
+  return gulp.src('./app/styles/index.css')
     .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(postcss([
-      atImport({ from: "web/next-up-app.css" }),
+      atImport({ from: "./app/styles/index.css" }),
       postcssCustomProperties,
       postcssNested,
       postcssColorGray,
@@ -48,7 +48,7 @@ gulp.task('css', function() {
 
 gulp.task('scripts', function() {
   var bundler = browserify({
-    entries: ['./src/next-up-app.ts'],
+    entries: ['./app/next-up-app.ts'],
     debug: true
   }).plugin(tsify, {typescript: require('typescript')});
   return bundler
@@ -64,7 +64,7 @@ gulp.task('scripts', function() {
 });
 
 gulp.task('html', function() {
-  gulp.src('./web/*.html')
+  gulp.src('./app/*.html')
     .pipe(plumber())
     .pipe(gulp.dest('./build'))
     .pipe(reload({stream: true}));
@@ -79,7 +79,8 @@ gulp.task('serve', ['default'], function() {
   // 1/ Local test server
   // apiServer = 'localhost:10741'
   // 2/ Local network PC test server (Mac dev)
-  apiServer = 'http://10.0.1.17:1111'
+  // apiServer = 'http://10.0.1.17:1111' // Timo Home
+  apiServer = 'http://192.168.29.85:1111'// AFAS
   // 3/ Prod server TODO fix auth
   // apiServer = 'https://cockpits.afasgroep.nl/POCockpit'
 
@@ -89,6 +90,7 @@ gulp.task('serve', ['default'], function() {
   browserSync({
     port: BROWSERSYNC_PORT,
     host: BROWSERSYNC_HOST,
+    startPath: 'planning.html',
     notify: false,
     server: {
       baseDir: 'build',
@@ -96,9 +98,9 @@ gulp.task('serve', ['default'], function() {
     }
   });
 
-   gulp.watch('./src/**/*.ts', ['scripts']);
-   gulp.watch(['./styles/**/*.css','./web/**/*.css'], ['css']);
-   gulp.watch('./web/**/*.html', ['html']);
+   gulp.watch('./app/**/*.ts', ['scripts']);
+   gulp.watch(['./app/styles/*.css'], ['css']);
+   gulp.watch('./app/**/*.html', ['html']);
 
 });
 
