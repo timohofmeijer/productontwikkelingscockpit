@@ -90,7 +90,6 @@ gulp.task('serve', ['default'], function() {
   browserSync({
     port: BROWSERSYNC_PORT,
     host: BROWSERSYNC_HOST,
-    startPath: 'planning.html',
     notify: false,
     server: {
       baseDir: 'build',
