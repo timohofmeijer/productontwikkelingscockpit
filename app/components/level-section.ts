@@ -5,6 +5,8 @@ import { createLevelSectionList } from './level-section-list'
 let h = maquette.h
 
 
+let nativePromisSupport = (typeof Promise !== "undefined" && Promise.toString().indexOf("[native code]") !== -1)
+
 /**
  * Animation duration is relative (parabolic)
  * to the animation distance.
@@ -23,29 +25,33 @@ let animateSubsectionEnter = (domNode: HTMLElement, properties: maquette.VNodePr
   let startHeight: number
   let targetHeight: number = domNode.scrollHeight
 
-  // The subsection enter animation can be into loading
-  // or expanded state. When into expanded, we want the
-  // loading height as our starting height.
-  if ((/loading/).test(domNode.className)) {
-    startHeight = 0
-    loadingHeight = targetHeight
+  if (nativePromisSupport) {
+    // The subsection enter animation can be into loading
+    // or expanded state. When into expanded, we want the
+    // loading height as our starting height.
+    if ((/loading/).test(domNode.className)) {
+      startHeight = 0
+      loadingHeight = targetHeight
+    } else {
+      startHeight = loadingHeight
+      // reset loadingHeight since loading-state
+      // will be skipped next run.
+      loadingHeight = 0
+    }
+
+    domNode.style.height = startHeight + 'px'
+
+    let distance: number = Math.abs(targetHeight - startHeight)
+    let duration: number = getAnimationDuration(distance, 700)
+
+    Velocity.animate(domNode, { height: [ targetHeight, startHeight ] }, { duration, easing: 'ease-in' }).then( () => { // [70, 10]
+      // Resetting height is required to ensure height adapts
+      // when nested sections are being expanded.
+      domNode.style.height = ''
+    })
   } else {
-    startHeight = loadingHeight
-    // reset loadingHeight since loading-state
-    // will be skipped next run.
-    loadingHeight = 0
+    // IE or other oldie... no animation
   }
-
-  domNode.style.height = startHeight + 'px'
-
-  let distance: number = Math.abs(targetHeight - startHeight)
-  let duration: number = getAnimationDuration(distance, 700)
-
-  Velocity.animate(domNode, { height: [ targetHeight, startHeight ] }, { duration, easing: 'ease-in' }).then( () => { // [70, 10]
-    // Resetting height is required to ensure height adapts
-    // when nested sections are being expanded.
-    domNode.style.height = ''
-  })
 }
 
 
@@ -54,7 +60,7 @@ let animateSubsectionExit = (domNode: HTMLElement, removeDomNodeFunction: () => 
   let startHeight: number = domNode.scrollHeight
 
   // If loading node, don't animate
-  if ((/loading/).test(domNode.className)) {
+  if ((/loading/).test(domNode.className) || !nativePromisSupport) {
     removeDomNodeFunction()
   } else {
     //
@@ -188,10 +194,9 @@ export let createLevelSectionComponent = (
   let activeSubHour: any
 
   let showTimeDetails = (event: any) => {
-    let node = <any>event.currentTarget
+    let node = <any>event.target
     let subHourString = node.dataset['subhour']
-    let subHour = JSON.parse(subHourString)
-    activeSubHour = subHour
+    activeSubHour = JSON.parse(subHourString)
   }
 
   let hideTimeDetails = (event: any) => {
@@ -204,20 +209,25 @@ export let createLevelSectionComponent = (
   }
 
   let bubbleIn = (domNode: HTMLElement, properties: maquette.VNodeProperties) => {
-    domNode.style.visibility = 'hidden'
-    Velocity.animate(domNode, { scale: 0, opacity: 0 }, 1).then(() => {
-      domNode.style.visibility = ''
-      Velocity.animate(domNode, { scale: [1, 0], opacity: [1, 0] }, { delay: 400, duration: 280, easing: 'ease-out-circ' })
-    })
+    if (nativePromisSupport) {
+      domNode.style.visibility = 'hidden'
+      Velocity.animate(domNode, { scale: 0, opacity: 0 }, 1).then(() => {
+        domNode.style.visibility = ''
+        Velocity.animate(domNode, { scale: [1, 0], opacity: [1, 0] }, { delay: 400, duration: 280, easing: 'ease-out-circ' })
+      })
+    }
   }
 
   let bubbleOut = (domNode: HTMLElement, removeDomNodeFunction: () => void, properties: maquette.VNodeProperties) => {
+    if (nativePromisSupport) {
+      // Cancel possible delay
+      let w: any = <any>window;
+      w.Velocity(domNode, 'stop', true);
 
-    // Cancel possible delay
-    let w: any = <any>window;
-    w.Velocity(domNode, 'stop', true);
-
-    Velocity.animate(domNode, { scale: 0, opacity: [0, 1] }, { duration: 300, easing: 'ease-in-circ' }).then(removeDomNodeFunction)
+      Velocity.animate(domNode, { scale: 0, opacity: [0, 1] }, { duration: 300, easing: 'ease-in-circ' }).then(removeDomNodeFunction)
+    } else {
+      removeDomNodeFunction()
+    }
   }
 
 
@@ -252,12 +262,12 @@ export let createLevelSectionComponent = (
 
           h.div.timeBox(
             config.sectionData.hours.subHours.map((subHour, i) => {
-              if (true || subHour.total || subHour.remaining || subHour.used) {
+              if (subHour.total || subHour.remaining || subHour.used) {
                 // debugger
                 return h.div.subHour([
                   h.div.remainingHours({
                     key: config.sectionData + 'hours',
-                    'data-subHour': JSON.stringify(subHour),
+                    'data-subhour': JSON.stringify(subHour),
                     onmouseenter: showTimeDetails,
                     onmouseleave: hideTimeDetails
                   }, [
